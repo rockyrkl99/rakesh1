@@ -1,0 +1,988 @@
+addClass.java 
+package com.rakesh 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.SQLException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class addCLASS extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public addCLASS() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at: ").append(request.getContextPath()); } 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String classid = request.getParameter("classid"); 
+String classname = request.getParameter("classname"); 
+//System.out.println(studid +" "+ studfname +" " +studlname+" "+ studdob +" "+ studadd +" "+  studphone); 
+PrintWriter out = response.getWriter(); 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "insert into clas values(?,?)"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ps.setString(1, classid); 
+ps.setString(2, classname); 
+int row = ps.executeUpdate(); 
+if(row>0) 
+{  
+response.sendRedirect("studeSUCCESS.html"); 
+}else 
+{ 
+response.sendRedirect("studFAIL.html");
+} 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+out.print("CHECK THE CONNECTION " + e); } catch (SQLException e) { 
+e.printStackTrace(); 
+} 
+} 
+}
+Class.java 
+package com.rakesh; 
+public class clas { 
+private String classid; 
+private String classname; 
+public String getClassid() { 
+return classid; 
+} 
+public void setClassid(String classid) { this.classid = classid; 
+} 
+public String getClassname() { 
+return classname; 
+} 
+public void setClassname(String classname) { this.classname = classname; 
+} 
+}
+classLIST.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.SQLException; 
+import java.util.List; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class classLIST extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public classLIST() { 
+super(); 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at: ").append(request.getContextPath()); } 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+studentDAO d = new studentDAO(); 
+PrintWriter out = response.getWriter(); 
+response.setContentType("text/html");  
+out.println("<html><body>"); 
+try { 
+List<techsub> t = d.techsubs(); //getstudent(); 
+out.println("<table border=1 width=20% height=20%>");  
+out.println("<tr><th>" + "CLASS LIST" +"</th></tr>");  
+for(techsub ab : t) 
+{ 
+out.println("<tr><td>"+ab.getTechclass()+"</td></tr>"); 
+} 
+out.println("</table>");  
+out.println("</html></body>"); 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+} catch (SQLException e) { 
+e.printStackTrace(); 
+} 
+} 
+} 
+DB_CONNECTION.java 
+package com.rakesh;
+import java.sql.Connection; 
+import java.sql.DriverManager; 
+import java.sql.SQLException; 
+public class DB_CONNECTION { 
+final static String DB_URL = "jdbc:mysql://localhost:3306/student"; final static String USER_NAME ="root"; 
+final static String USER_PASS = "Praj@007#"; 
+final static String DRIVER = "com.mysql.jdbc.Driver"; 
+public static Connection getConn() throws ClassNotFoundException,  SQLException 
+{ 
+Class.forName(DRIVER); 
+Connection con =  
+DriverManager.getConnection(DB_URL,USER_NAME,USER_PASS); 
+return con; 
+} 
+}
+DELETEstuds.java 
+package com.rakesh; 
+import java.io.IOException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class DELETEstuds extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public DELETEstuds() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+doGet(request, response); 
+} 
+}
+NEWaddedCLASS.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.SQLException; 
+import java.util.List; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class NEWaddedCLASS extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public NEWaddedCLASS() { 
+super(); 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+response.getWriter().append("Served at: ").append(request.getContextPath()); } 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+studentDAO b = new studentDAO(); 
+PrintWriter out = response.getWriter(); 
+response.setContentType("text/html");  
+out.println("<html><body>"); 
+try { 
+List<NEWCLASS> s = b.newclasses(); 
+out.println("<table border=1 width=50% height=50%>");  
+out.println("<tr><th>CLASS ID</th><th>" 
++ "CLASS LIST</th></tr>");  
+for( NEWCLASS ss:s) 
+{out.println("<tr><td>"+ss.getClassid() + 
+"</td><td>"+ ss.getClassname()+"</td></tr>"); 
+} 
+out.println("</table>");  
+out.println("</html></body>"); 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+} catch (SQLException e) { 
+e.printStackTrace(); 
+} 
+} 
+}
+NEWCLASS.java 
+package com.rakesh; 
+public class NEWCLASS { 
+private String classid; 
+private String classname; 
+public String getClassid() { 
+return classid; 
+} 
+public void setClassid(String classid) { this.classid = classid; 
+} 
+public String getClassname() { 
+return classname; 
+} 
+public void setClassname(String classname) { this.classname = classname; 
+} 
+}
+NewSubINSERT.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.SQLException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class NewSubINSERT extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public NewSubINSERT() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String subid = request.getParameter("subid"); 
+String subcode = request.getParameter("subcode"); 
+String subname = request.getParameter("subname"); 
+String classname = request.getParameter("classname"); 
+PrintWriter out = response.getWriter(); 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "insert into subject values(?,?,?,?)"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ps.setString(1, subid); 
+ps.setString(2, subcode); 
+ps.setString(3, subname); 
+ps.setString(4, classname);
+int row = ps.executeUpdate(); 
+if(row>0) 
+{ 
+response.sendRedirect("studeSUCCESS.html"); 
+}else 
+{ 
+response.sendRedirect("studFAIL.html"); 
+} 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+out.print("CHECK THE CONNECTION " + e); 
+} catch (SQLException e) { 
+response.sendRedirect("studFAIL.html"); 
+e.printStackTrace(); 
+} 
+} 
+}
+REPORT.java 
+package com.rakesh; 
+public class REPORT { 
+/*REPORT CLASS VERIABLES*/ 
+private String classid; 
+private String classname; 
+/*STUDENT CLASS VERIABLES*/ 
+private String studid; 
+private String studfname; 
+private String studlname; 
+private String studdob; 
+private String studadd; 
+private String studphone; 
+private String stud_class; 
+private String studclass; 
+//private String classname; 
+public String getStudclass() { 
+return studclass; 
+} 
+public void setStudclass(String studclass) { this.studclass = studclass; 
+} 
+public String getStud_class() { 
+return stud_class; 
+} 
+public void setStud_class(String stud_class) { this.stud_class = stud_class; 
+} 
+/*TECH_SUB CLASS VERIABLES*/ 
+private String ssubject; 
+private String assigntech; 
+private String techclass; 
+private String techid; 
+public String getTechid() { 
+return techid; 
+} 
+public void setTechid(String techid) { this.techid = techid; 
+} 
+public String getClassid() { 
+return classid; 
+} 
+public void setClassid(String classid) {
+this.classid = classid; 
+} 
+public String getStudid() { 
+return studid; 
+} 
+public void setStudid(String studid) { this.studid = studid; 
+} 
+public String getStudfname() { 
+return studfname; 
+} 
+public void setStudfname(String studfname) { this.studfname = studfname; 
+} 
+public String getStudlname() { 
+return studlname; 
+} 
+public void setStudlname(String studlname) { this.studlname = studlname; 
+} 
+public String getStuddob() { 
+return studdob; 
+} 
+public void setStuddob(String studdob) { this.studdob = studdob; 
+} 
+public String getStudadd() { 
+return studadd; 
+} 
+public void setStudadd(String studadd) { this.studadd = studadd; 
+} 
+public String getStudphone() { 
+return studphone; 
+} 
+public void setStudphone(String studphone) { this.studphone = studphone; 
+} 
+public String getTechclass() { 
+return techclass; 
+} 
+public void setTechclass(String techclass) { this.techclass = techclass; 
+} 
+public String getSsubject() { 
+return ssubject; 
+} 
+public void setSsubject(String ssubject) {
+this.ssubject = ssubject; 
+} 
+public String getAssigntech() { 
+return assigntech; 
+} 
+public void setAssigntech(String assigntech) { this.assigntech = assigntech; 
+} 
+public String getClassname() { 
+return classname; 
+} 
+public void setClassname(String classname) { this.classname = classname; 
+} 
+}
+RETRIVEREPORT.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.ResultSet; 
+import java.sql.SQLException; 
+import java.util.List; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class RETRIVEREPORT extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public RETRIVEREPORT() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String classname = request.getParameter("classname"); 
+// studentDAO dao = new studentDAO(); 
+PrintWriter out = response.getWriter(); 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+PreparedStatement ps = con.prepareStatement( 
+"select studid, studfname, studlname, studdob,  
+studadd,studphone, stud_class, techid, assigntech, ssubject from s_t,sub_tech  where studclass= '"+classname+"'"); 
+// + "inner join sub_tech stt" 
+// + "on a.studclass = stt.techclass" 
+// + "where a.studclass='"+classname+"'");
+ResultSet rs = ps.executeQuery(); 
+while(rs.next()) 
+{ 
+response.setContentType("text/html");  
+out.println("<html><body>"); 
+out.println("<table border=2 width=50% height=50%>");  out.println( 
+// "<tr><th>Student ID</th></th>"+ "<tr><td>"+ rs.getString(1) + "</td><td>" 
+// "<tr><th> First Name</th><th>"  + "</td><td>"+rs.getString(2)+"</td><td>" 
+// "<tr><th>Last Name</th><th>" + "</td><td>"+rs.getString(3)+"</td><td>" 
++ "</td><td>"+ rs.getString(4)+"</td><td>" 
++ "</td><td>"+ rs.getString(5)+"</td><td>" 
++ "</td><td>"+ rs.getString(6)+"</td><td>" 
++ "</td><td>"+ rs.getString(7)+"</td><td>" 
++ "</td><td>"+rs.getString(8)+"</td><td>" 
++ "</td><td>"+rs.getString(9) +"</td><td>" 
++ "</td><td>" + rs.getString(10) + "</tr></td>"); 
+/*"<tr><th>Student ID</th><th>" 
++ "First Name</th><th>" 
++ "Last Name</th><th>" 
++ "DOB</th><th>" 
++ "Address</th><th>" 
++ "Phone No</th><th>" 
++ "Assigned Class </th><th>" 
++ "Teacher ID</th><th>" 
++ "Assigned Teacher</th><th>" 
++ "Subject</th></tr>");*/ 
+out.println("</table>");  
+out.println("</html></body>"); 
+} 
+} 
+catch (ClassNotFoundException e) { 
+// TODO Auto-generated catch block 
+e.printStackTrace(); 
+} catch (SQLException e) { 
+e.printStackTrace(); 
+out.print(e); 
+out.print("CHECK RETRIVE PAGE"); 
+}
+} 
+} 
+/*// for(techsub tt : ts) 
+// for(clas css : cs) 
+for(REPORT rr:r) 
+{ 
+out.println("<tr><td>"+rr.getStudid()+ 
+"</td><td>"+rr.getStudfname()+ 
+"</td><td>"+rr.getStudlname()+ 
+"</td><td>"+ rr.getStuddob()+ 
+"</td><td>"+ rr.getStudadd()+  
+"</td><td>"+ rr.getStudphone()+ 
+"</td><td>"+  
+rr.getStud_class()+  
+"</td><td>"+rr.getTechid()+  
+"</td><td>"+rr.getAssigntech() +  
+"</td><td>"+rr.getSsubject() +"</td></tr>"); 
+} 
+*/
+Student.java 
+package com.rakesh; 
+public class student { 
+private String studid; 
+private String studfname; 
+private String studlname; 
+private String studdob; 
+private String studadd; 
+private String studphone; 
+private String studclass; 
+private String stud_class; 
+public String getStud_class() { 
+return stud_class; 
+} 
+public void setStud_class(String stud_class) { this.stud_class = stud_class; 
+} 
+public String getStudid() { 
+return studid; 
+} 
+public void setStudid(String studid) { this.studid = studid; 
+} 
+public String getStudfname() { 
+return studfname; 
+} 
+public void setStudfname(String studfname) { this.studfname = studfname; 
+} 
+public String getStudlname() { 
+return studlname; 
+} 
+public void setStudlname(String studlname) { this.studlname = studlname; 
+} 
+public String getStuddob() { 
+return studdob; 
+} 
+public void setStuddob(String studdob) { this.studdob = studdob; 
+} 
+public String getStudadd() { 
+return studadd; 
+} 
+public void setStudadd(String studadd) {
+this.studadd = studadd; 
+} 
+public String getStudphone() { 
+return studphone; 
+} 
+public void setStudphone(String studphone) { this.studphone = studphone; 
+} 
+public String getStudclass() { 
+return studclass; 
+} 
+public void setStudclass(String studclass) { this.studclass = studclass; 
+} 
+}
+studentDAO 
+package com.rakesh; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.ResultSet; 
+import java.sql.SQLException; 
+import java.util.ArrayList; 
+import java.util.List; 
+public class studentDAO { 
+/*STUDENT DATA RETRIVEING CODE START*/ 
+public List<student> getstudent() throws ClassNotFoundException,  SQLException 
+{ 
+ArrayList<student> list = new ArrayList<student>(); 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "select * from s_t"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ResultSet rs = ps.executeQuery(); 
+while(rs.next()) 
+{ 
+student s = new student(); 
+s.setStudid(rs.getString(1)); 
+s.setStudfname(rs.getString(2)); 
+s.setStudlname(rs.getString(3)); 
+s.setStuddob(rs.getString(4)); 
+s.setStudadd(rs.getString(5)); 
+s.setStudphone(rs.getString(6)); 
+s.setStudclass(rs.getString(7)); 
+s.setStud_class(rs.getString(8)); 
+list.add(s); 
+} 
+return list; 
+} 
+/*STUDENT DATA RETRIVEING CODE END*/ 
+/*SUBJECT AND ASSIGNED TEACHERS DATA RETRIVEING CODE START*/ public List<techsub> techsubs() throws ClassNotFoundException,  SQLException 
+{ 
+ArrayList<techsub> list = new ArrayList<techsub>(); 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "select * from sub_tech";
+PreparedStatement ps = con.prepareStatement(sql); 
+ResultSet rs = ps.executeQuery(); 
+while(rs.next()) 
+{ 
+techsub ts = new techsub(); //student s = new student(); 
+ts.setTechid(rs.getString(1)); 
+ts.setSsubject(rs.getString(2)); 
+ts.setAssigntech(rs.getString(3)); 
+ts.setTechclass(rs.getString(4)); 
+list.add(ts); 
+} 
+return list; 
+} 
+/*SUBJECT AND ASSIGNED TEACHERS DATA RETRIVEING CODE END*/ /*ADD NEW SUBJECT AND TEACHERS DATA RETRIVEING CODE START*/ 
+public List<SUBTECHRS> subtechrs() throws ClassNotFoundException,  SQLException 
+{ 
+ArrayList<SUBTECHRS> list = new ArrayList<SUBTECHRS>(); 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "select * from subject"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ResultSet rs = ps.executeQuery(); 
+while(rs.next()) 
+{ 
+SUBTECHRS ts = new SUBTECHRS(); //student s = new student(); ts.setSubid(rs.getString(1)); 
+ts.setSubcode(rs.getString(2)); 
+ts.setSubname(rs.getString(3)); 
+ts.setClassname(rs.getString(4)); 
+list.add(ts); 
+} 
+return list; 
+} 
+/*ADD NEW SUBJECT AND TEACHERS DATA RETRIVEING CODE END*/ 
+/*CLASS LIST DATA RETRIVEING CODE START*/ 
+public List<clas> tecClas() throws ClassNotFoundException, SQLException { 
+ArrayList<clas> list = new ArrayList<clas>(); 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "select * from clas"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ResultSet rs = ps.executeQuery(); 
+while(rs.next())
+{ 
+clas tss = new clas(); //student s = new student(); 
+tss.setClassid(rs.getString(1)); 
+tss.setClassname(rs.getString(2)); 
+list.add(tss); 
+} 
+return list; 
+} 
+/*CLASS LIST DATA RETRIVEING CODE END*/ 
+/*NEW ADDED CLASS LIST DATA RETRIVEING CODE START*/ 
+public List<NEWCLASS> newclasses() throws ClassNotFoundException,  SQLException 
+{ 
+ArrayList<NEWCLASS> list = new ArrayList<NEWCLASS>(); Connection con = DB_CONNECTION.getConn(); 
+String sql = "select * from clas"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ResultSet rs = ps.executeQuery(); 
+while(rs.next()) 
+{ 
+NEWCLASS tss = new NEWCLASS(); //student s = new student(); tss.setClassid(rs.getString(1)); 
+tss.setClassname(rs.getString(2)); 
+list.add(tss); 
+} 
+return list; 
+} 
+/*NEW ADDED CLASS LIST DATA RETRIVEING CODE END*/ 
+/*DELETE DATA RETRIVEING CODE END*/ 
+}
+studentRETRIVE.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.SQLException; 
+import java.util.List; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class studentRETRIVE extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public studentRETRIVE() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+studentDAO dao = new studentDAO(); 
+PrintWriter out = response.getWriter(); 
+response.setContentType("text/html");  
+out.println("<html><body>"); 
+try { 
+List<student> s = dao.getstudent(); 
+out.println("<table border=1 width=50% height=50%>");  
+out.println("<tr><th>ID</th><th>" 
++ "FirstName</th><th>" 
++ "LastName</th><th>" 
++ "DOB</th><th>" 
++ "Address</th><th>" 
++ "Phone no</th><th>" 
++ "Assigned Class</th></tr>");  
+for(student ss:s) 
+{
+out.println("<tr><td>"+ss.getStudid()+ 
+"</td><td>"+ss.getStudfname()+ 
+"</td><td>"+ss.getStudlname()+ 
+"</td><td>"+ ss.getStuddob()+ 
+"</td><td>"+ ss.getStudadd()+  
+"</td><td>"+ ss.getStudphone()+ 
+"</td><td>"+ ss.getStudclass()+"</td></tr>"); 
+} 
+out.println("</table>");  
+out.println("</html></body>"); 
+} catch (ClassNotFoundException e) { 
+// TODO Auto-generated catch block 
+e.printStackTrace(); 
+} catch (SQLException e) { 
+// TODO Auto-generated catch block 
+e.printStackTrace(); 
+} 
+} 
+}
+studentUPDATE.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.SQLException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class studentUPDATE extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public studentUPDATE() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String studid = request.getParameter("studid"); 
+String studfname = request.getParameter("studfname"); 
+String studlname = request.getParameter("studlname"); 
+String studdob = request.getParameter("studdob"); 
+String studadd = request.getParameter("studadd"); 
+String studphone = request.getParameter("studphone"); 
+String studclass = request.getParameter("studclass"); 
+String stud_class = request.getParameter("stud_class"); 
+//System.out.println(studid +" "+ studfname +" " +studlname+" "+  studdob +" "+ studadd +" "+ studphone); 
+PrintWriter out = response.getWriter(); 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "update s_t set studfname=?, studlname=?, studdob=?,  studadd=?, studphone=?, studclass=?, stud_class=? where studid=?";
+PreparedStatement ps = con.prepareStatement(sql); 
+ps.setString(1, studfname); 
+ps.setString(2, studlname); 
+ps.setString(3, studdob); 
+ps.setString(4, studadd); 
+ps.setString(5, studphone); 
+ps.setString(6, studclass); 
+ps.setString(7, stud_class); 
+ps.setString(8, studid); 
+int row = ps.executeUpdate(); 
+if(row>0) 
+{ 
+//out.print("UPDATED "); 
+response.sendRedirect("studeSUCCESS.html"); 
+}else 
+{ 
+//out.print("NOT UPDATED"); 
+response.sendRedirect("studFAIL.html"); 
+} 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+out.print("CHECK THE CONNECTION " + e); 
+} catch (SQLException e) { 
+e.printStackTrace(); 
+} 
+} 
+}
+studINSERT.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.SQLException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class studINSERT extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public studINSERT() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String studid = request.getParameter("studid"); 
+String studfname = request.getParameter("studfname"); 
+String studlname = request.getParameter("studlname"); 
+String studdob = request.getParameter("studdob"); 
+String studadd = request.getParameter("studadd"); 
+String studphone = request.getParameter("studphone"); 
+String studclass = request.getParameter("studclass"); 
+String stud_class = request.getParameter("stud_class"); //System.out.println(studid +" "+ studfname +" " +studlname+" "+  studdob +" "+ studadd +" "+ studphone); 
+PrintWriter out = response.getWriter(); 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "insert into s_t values(?,?,?,?,?,?,?,?)"; PreparedStatement ps = con.prepareStatement(sql); 
+ps.setString(1, studid);
+ps.setString(2, studfname); 
+ps.setString(3, studlname); 
+ps.setString(4, studdob); 
+ps.setString(5, studadd); 
+ps.setString(6, studphone); 
+ps.setString(7, studclass); 
+ps.setString(8, stud_class); 
+int row = ps.executeUpdate(); 
+if(row>0) 
+{ 
+//out.print("done"); 
+response.sendRedirect("studeSUCCESS.html"); 
+}else 
+{ 
+response.sendRedirect("studFAIL.html"); 
+} 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+out.print("CHECK THE CONNECTION " + e); 
+} catch (SQLException e) { 
+response.sendRedirect("SUBisNotinDB.html"); 
+e.printStackTrace(); 
+} 
+} 
+}
+subDELETES.java 
+package com.Shubham; 
+import java.io.IOException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class subDELETES extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public subDELETES() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+} 
+}
+SUBlistRETRIVE.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.SQLException; 
+import java.util.List; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class SUBlistRETRIVE extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public SUBlistRETRIVE() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+studentDAO d = new studentDAO(); 
+PrintWriter out = response.getWriter(); 
+response.setContentType("text/html");  
+out.println("<html><body>"); 
+try { 
+List<techsub> t = d.techsubs(); //getstudent(); 
+out.println("<table border=1 width=50% height=50%>");  
+out.println("<tr><th>" 
++ "SUBJECT</th><th>" 
++ "ASSIGNED TEACHER</tr></th>"); 
+for(techsub ab : t) 
+{ 
+out.println("<tr><td>"+ab.getSsubject()+ 
+"</td><td>"+ ab.getAssigntech()+"</td></tr>"); 
+} 
+out.println("</table>");  
+out.println("</html></body>"); 
+} catch (ClassNotFoundException e) {
+// TODO Auto-generated catch block 
+e.printStackTrace(); 
+} catch (SQLException e) { 
+// TODO Auto-generated catch block 
+e.printStackTrace(); 
+} 
+} 
+}
+SUBtecher.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.SQLException; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class SUBtecher extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public SUBtecher() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String techid = request.getParameter("techid"); 
+String ssubject = request.getParameter("ssubject"); 
+String assigntech = request.getParameter("assigntech"); String techclass = request.getParameter("techclass");  
+//String classid = request.getParameter("classid"); 
+PrintWriter out = response.getWriter(); 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+String sql = "insert into sub_tech values(?,?,?,?)"; 
+PreparedStatement ps = con.prepareStatement(sql); 
+ps.setString(1, techid); 
+ps.setString(2, ssubject); 
+ps.setString(3, assigntech); 
+ps.setString(4, techclass); 
+//ps.setString(5, classid);
+int row = ps.executeUpdate();  
+if(row>0) 
+{ 
+response.sendRedirect("studeSUCCESS.html"); 
+}else 
+{ 
+response.sendRedirect("studFAIL.html"); 
+} 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+out.print("CHECK THE CONNECTION " + e); 
+} catch (SQLException e) { 
+response.sendRedirect("SUBtecherError.html");  e.printStackTrace(); 
+} 
+} 
+}
+SUBtecherDELETE.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.Connection; 
+import java.sql.PreparedStatement; 
+import java.sql.SQLException; 
+import java.sql.Statement; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class SUBtecherDELETE extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public SUBtecherDELETE() { 
+super(); 
+// TODO Auto-generated constructor stub 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+// TODO Auto-generated method stub 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+String techid = request.getParameter("techid"); 
+//System.out.println(studid +" "+ studfname +" " +studlname+" "+  studdob +" "+ studadd +" "+ studphone); 
+PrintWriter out = response.getWriter(); 
+Statement st; 
+try { 
+Connection con = DB_CONNECTION.getConn(); 
+st = con.createStatement(); 
+//String sql = "delete * from sub_tech where techid='"+ techid  +"' ";  
+int result = st.executeUpdate("delete * from sub_tech where  techid='"+ techid +"' ");
+out.print(result+"DATA DELETED"); 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+out.print("CHECK THE CONNECTION " + e); } catch (SQLException e) { 
+e.printStackTrace(); 
+} 
+} 
+}
+SUBTECHERretrive.java 
+package com.rakesh; 
+import java.io.IOException; 
+import java.io.PrintWriter; 
+import java.sql.SQLException; 
+import java.util.List; 
+import javax.servlet.ServletException; 
+import javax.servlet.http.HttpServlet; 
+import javax.servlet.http.HttpServletRequest; 
+import javax.servlet.http.HttpServletResponse; 
+public class SUBTECHERretrive extends HttpServlet { 
+private static final long serialVersionUID = 1L; 
+public SUBTECHERretrive() { 
+super(); 
+} 
+protected void doGet(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException { 
+response.getWriter().append("Served at:  
+").append(request.getContextPath()); 
+} 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+studentDAO a = new studentDAO(); 
+PrintWriter out = response.getWriter(); 
+response.setContentType("text/html");  
+out.println("<html><body>"); 
+try { 
+List<SUBTECHRS> s = a.subtechrs(); 
+out.println("<table border=1 width=50% height=50%>");  
+out.println("<tr><th>SUBJECT ID</th><th>" 
++ "SUBJECT CODE</th><th>" 
++ "SUBJECT NAME </th><th>" 
++ "ASSIGNED CLASS </tr></th>");  
+for(SUBTECHRS ss:s) 
+{ 
+out.println("<tr><td>"+ss.getSubid()+ 
+"</td><td>"+ss.getSubcode()+ 
+"</td><td>"+ ss.getSubname()+ 
+"</td><td>"+ ss.getClassname()+ "</td></tr>"); 
+} 
+out.println("</table>");  
+out.println("</html></body>"); 
+} catch (ClassNotFoundException e) { 
+e.printStackTrace(); 
+} catch (SQLException e) { 
+e.printStackTrace();
+} 
+} 
+}
